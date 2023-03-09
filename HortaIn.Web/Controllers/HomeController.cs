@@ -13,7 +13,7 @@ namespace HortaIn.Web.Controllers
             _logger = logger;
         }
 
-        public IActionResult Index()
+        public IActionResult Signup()
         {
             return View();
         }
