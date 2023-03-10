@@ -52,10 +52,11 @@ namespace HortaIn.API.Controllers
                     dictionary.AddModelError(error.Code, error.Description);
                     return new BadRequestObjectResult(new { Message = "Registro de usuário falhou", Errors = dictionary });
                 }
+            return Ok(new { Message = "Usuário registrado com sucesso" });
 
             }
+            return BadRequest();
 
-            return Ok(new { Message = "Usuário registrado com sucesso" });
         }
 
         [HttpPost]
