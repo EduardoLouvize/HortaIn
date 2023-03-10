@@ -7,12 +7,44 @@ html {
     font-size: 16px;
   }
 }
-
-html {
-  position: relative;
-  min-height: 100%;
-}
-
 body {
-  margin-bottom: 60px;
+  height: 100vh;
+}
+#signup {
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.form-container {
+  width: 600px;
+  border-radius: 10px;
+}
+.form-container h1 {
+  font-size: 2rem;
+  color: #403866;
+  margin-bottom: 45px;
+}
+.form-container form {
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.form-container form input {
+  background-color: #e6e6e6;
+  height: 40px;
+}
+.form-container p {
+  margin-top: 30px;
+  text-align: center;
+}
+.form-btn {
+  width: 100%;
+  outline: none;
+  border: none;
+  height: 40px;
+  background: #827fee;
+  color: white;
+  font-weight: bold;
+  border-radius: 4px;
 }

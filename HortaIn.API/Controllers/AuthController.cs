@@ -37,7 +37,11 @@ namespace HortaIn.API.Controllers
             }
 
             var identityUser = new IdentityUser() { UserName = userDetails.UserName, Email = userDetails.Email };
-
+            var emailInUse = await userManager.FindByEmailAsync(userDetails.Email);
+            if (emailInUse != null)
+            {
+               return Conflict("Email already in use"); 
+            }
             var result = await userManager.CreateAsync(identityUser, userDetails.Password);
 
             if (result.Succeeded)
@@ -46,12 +50,13 @@ namespace HortaIn.API.Controllers
                 foreach (IdentityError error in result.Errors)
                 {
                     dictionary.AddModelError(error.Code, error.Description);
+                    return new BadRequestObjectResult(new { Message = "Registro de usuário falhou", Errors = dictionary });
                 }
-
-                return new BadRequestObjectResult(new { Message = "Registro de usuário falhou", Errors = dictionary });
-            }
-
             return Ok(new { Message = "Usuário registrado com sucesso" });
+
+            }
+            return BadRequest();
+
         }
 
         [HttpPost]
@@ -59,12 +64,11 @@ namespace HortaIn.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginCredentials credentials)
         {
             IdentityUser identityUser;
-
             if (!ModelState.IsValid
                 || credentials == null
                 || (identityUser = await ValidateUser(credentials)) == null)
             {
-                return new BadRequestObjectResult(new { Message = "Login failed" });
+                return Unauthorized(new { Message = "Login failed" });
             }
 
             var token = GenerateToken(identityUser);
