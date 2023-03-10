@@ -59,12 +59,11 @@ namespace HortaIn.API.Controllers
         public async Task<IActionResult> Login([FromBody] LoginCredentials credentials)
         {
             IdentityUser identityUser;
-
             if (!ModelState.IsValid
                 || credentials == null
                 || (identityUser = await ValidateUser(credentials)) == null)
             {
-                return new BadRequestObjectResult(new { Message = "Login failed" });
+                return Unauthorized(new { Message = "Login failed" });
             }
 
             var token = GenerateToken(identityUser);
