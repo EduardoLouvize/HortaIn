@@ -37,7 +37,11 @@ namespace HortaIn.API.Controllers
             }
 
             var identityUser = new IdentityUser() { UserName = userDetails.UserName, Email = userDetails.Email };
-
+            var emailInUse = await userManager.FindByEmailAsync(userDetails.Email);
+            if (emailInUse != null)
+            {
+               return Conflict("Email already in use"); 
+            }
             var result = await userManager.CreateAsync(identityUser, userDetails.Password);
 
             if (result.Succeeded)
