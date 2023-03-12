@@ -13,13 +13,15 @@ var builder = WebApplication.CreateBuilder(args);
 
 //Instanciando Db Connection
 builder.Services.AddDbContext<UsuarioContext>(
+    options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppIdentityConnection"))
+    );
+builder.Services.AddDbContext<PasswordChangeContext>(
     options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsuariosDb"))
     );
-
 //Instanciando Db do Identity
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppIdentityConnection")));
 
-builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true)
+builder.Services.AddIdentity<IdentityUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
 
