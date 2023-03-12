@@ -2,11 +2,32 @@
 
 <div class="form-container">
     <h1 style="text-align: center;">RECUPERAR SENHA</h1>
-<form>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Endereço de email">
+<form id="rform">
+    <input type="email" class="form-control" id="remail" aria-describedby="emailHelp" placeholder="Endereço de email">
     <button type="submit" class="form-btn">Recuperar</button>
 </form>
 <p><span><a href="/Home/Signin">Voltar</a></span></p>
 </div>
-
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+    var loading = false
+    document.getElementById("rform").addEventListener("submit", async (e) => {
+        e.preventDefault()
+      
+        if(loading) return
+          loading = true
+        const email = document.getElementById("remail").value
+        try{
+        const response = await axios.post("http://localhost:3000/api/change-password/Request",{Email:email})
+        alert("Um link para redefinição de senha foi enviado para este endereço de email")
+        }
+        catch(e){
+            if(e.response?.status === 404){
+                return alert("Conta não encontrada")
+            }
+            alert("Algo deu errado. Tente novamente mais tarde")
+        }
+        loading = false
+    })
+</script>

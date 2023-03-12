@@ -22,9 +22,9 @@ namespace HortaIn.API.Controllers
 
         [HttpPost]
         [Route("Request")]
-        public async Task<IActionResult> RequestChange(string email)
+        public async Task<IActionResult> RequestChange(RequestDTO RequestDTO)
         {   
-            var accountFound = await userManager.FindByEmailAsync(email);
+            var accountFound = await userManager.FindByEmailAsync(RequestDTO.Email);
             if (accountFound == null)
             {
                 return NotFound("conta não encontada");
@@ -33,13 +33,13 @@ namespace HortaIn.API.Controllers
             var request = new PasswordRecovery{Secret = secret, Used= false,UserName= accountFound.ToString()};
             _context.Add(request);
             _context.SaveChanges();
-            Mailer.Send(email,secret);
+            Mailer.Send(RequestDTO.Email,secret);
             return Ok("");
         }
         [HttpGet]
         [Route("Request/{secret}")]
         public async Task<IActionResult> Verify(string secret)
-        {   
+        {
             var secretFound = _context.PasswordChange.FirstOrDefault(p => p.Secret == secret);
             if (secretFound == null)
             {
@@ -48,7 +48,6 @@ namespace HortaIn.API.Controllers
             if (secretFound?.Used == true)
             {
                 return Conflict("Requisição já utilizada");
-
             }
             return Ok("Requisição válida");
         }
@@ -84,4 +83,7 @@ namespace HortaIn.API.Controllers
         }
 
 }
+}
+public class RequestDTO {
+    public string? Email { get; set; }
 }
