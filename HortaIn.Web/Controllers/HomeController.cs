@@ -26,7 +26,10 @@ namespace HortaIn.Web.Controllers
         {
             return View();
         }
-       
+         public IActionResult Change(string secret)
+        {
+            return View();
+        }
         [ResponseCache(Duration = 0, Location = ResponseCacheLocation.None, NoStore = true)]
         public IActionResult Error()
         {

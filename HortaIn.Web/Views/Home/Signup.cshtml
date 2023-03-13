@@ -3,14 +3,50 @@
 
 <div class="form-container">
     <h1 style="text-align: center;">Registro</h1>
-<form>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Endereço de email">
-    <input type="name" class="form-control" id="exampleInputPassword1" placeholder="Nome de usuário">
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha">
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Confirmar senha">
+<form id="formSignup">
+    <input type="email" class="form-control" id="uemail" aria-describedby="emailHelp" placeholder="Endereço de email">
+    <input type="name" class="form-control" id="uusername" placeholder="Nome de usuário">
+    <input type="password" class="form-control" id="upassword1" placeholder="Senha">
+    <input type="password" class="form-control" id="upassword2" placeholder="Confirmar senha">
   <button type="submit" class="form-btn">Criar</button>
 </form>
 <p>Já possui uma conta? <span><a href="/Home/Signin">Faça login aqui</a></span></p>
 </div>
 
 </div>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script>
+  var loading = false
+document.getElementById("formSignup").addEventListener("submit", async(e) => {
+  e.preventDefault()
+  if  (loading)return
+  loading = true
+  var password1 = document.getElementById("upassword1").value
+  var password2 = document.getElementById("upassword2").value
+  var email = document.getElementById("uemail").value
+  var username = document.getElementById("uusername").value
+
+  if(password1 !== password2)  {
+    return alert("Senhas precisam ser iguais")
+  }
+  
+  if(!/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(password1)){
+      return alert("Senha deve ter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial")
+  }
+  try{
+  const response = await axios.post("http://localhost:3000/api/Auth/Register",{Email:email,UserName:username,Password:password1})
+  alert("Conta criada com sucesso")
+  window.location.href = "/Home/Signin"
+  }
+  catch(e) {
+    loading = false
+  if (e.response.status === 409) {
+   return alert("email ou username já cadastrados")
+  }
+  alert("Registro falhou")
+  }
+  
+  
+})
+
+</script>

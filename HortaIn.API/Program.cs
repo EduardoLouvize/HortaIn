@@ -88,6 +88,7 @@ builder.Services.AddSwaggerGen(option =>
         });
 });
 
+ builder.Services.AddCors();
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -96,11 +97,14 @@ if (app.Environment.IsDevelopment())
     app.UseSwagger();
     app.UseSwaggerUI();
 }
+app.UseCors( c =>  {
+    c.AllowAnyHeader().AllowAnyMethod().AllowAnyOrigin();
 
+});
 app.UseAuthentication();
 
 app.UseAuthorization();
 
 app.MapControllers();
 
-app.Run();
+app.Run("http://localhost:3000");
