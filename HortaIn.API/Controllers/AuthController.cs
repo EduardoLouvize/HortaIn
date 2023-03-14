@@ -1,10 +1,12 @@
 ﻿using HortaIn.API.JWTBearerConfiguration;
 using HortaIn.BLL.Models;
+using HortaIn.DAL.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
@@ -20,8 +22,9 @@ namespace HortaIn.API.Controllers
     {
         private readonly JwtBearerTokenSettings jwtBearerTokenSettings;
         private readonly UserManager<IdentityUser> userManager;
+        private readonly ApplicationDbContext _context;
 
-        public AuthController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, UserManager<IdentityUser> userManager)
+        public AuthController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, UserManager<IdentityUser> userManager, ApplicationDbContext context)
         {
             this.userManager = userManager;
             this.jwtBearerTokenSettings = jwtTokenOptions.Value;
@@ -72,7 +75,8 @@ namespace HortaIn.API.Controllers
             }
 
             var token = GenerateToken(identityUser);
-            return Ok(new { Token = token, Message = "Success" });
+            //return Ok(new { Token = token, Message = "Success" });
+            return Ok(token);
         }
 
         [HttpPost]
@@ -88,7 +92,7 @@ namespace HortaIn.API.Controllers
 
         private async Task<IdentityUser> ValidateUser(LoginCredentials credentials)
         {
-            var identityUser = await userManager.FindByNameAsync(credentials.UserName);
+            var identityUser = await userManager.FindByEmailAsync(credentials.Email);
             if (identityUser != null)
             {
                 var result = userManager.PasswordHasher.VerifyHashedPassword(identityUser, identityUser.PasswordHash, credentials.Password);
@@ -120,5 +124,66 @@ namespace HortaIn.API.Controllers
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
         }
+
+        // PUT: api/Products/5
+        // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
+        //[HttpPut("{email}")]
+        //public async Task<IActionResult> PutProduct(LoginCredentials credentials)
+        //{
+        //    var identityUser = await userManager.FindByEmailAsync(credentials.Email);
+
+
+        //    _context.Entry(identityUser).State = EntityState.Modified;
+
+        //    try
+        //    {
+        //        await _context.SaveChangesAsync();
+        //    }
+        //    catch (DbUpdateConcurrencyException)
+        //    {
+        //        if (!UserExists(credentials.Email))
+        //        {
+        //            return NotFound();
+        //        }
+        //        else
+        //        {
+        //            throw;
+        //        }
+        //    }
+
+        //    return CreatedAtAction("GetUser", new { email = identityUser.Email }, identityUser);
+        //}
+
+        [HttpGet("{email}")]
+        public async Task<ActionResult<IdentityUser>> GetUser(string email)
+        {
+            var user = await _context.Users.FindAsync(email);
+
+            if (user == null)
+            {
+                return NotFound();
+            }
+
+            return user;
+        }
+
+        private bool UserExists(string email)
+        {
+            return _context.Users.Any(e => e.Email == email);
+        }
+
+
+
+        //Para testes retornando todos os usuários cadastrados
+        [Authorize]
+        [HttpGet]
+        [Route("Users")]
+        public async Task<ActionResult<IEnumerable<IdentityUser>>> GetUsers()
+        {
+            
+            return await userManager.Users.ToListAsync();
+            
+        }
+
     }
 }

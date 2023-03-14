@@ -1,14 +1,50 @@
-﻿<div id="signup" class="container">
+﻿@model UserDetails
 
-<div class="form-container">
-    <h1 style="text-align: center;">LOGIN</h1>
-<form>
-    <input type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp" placeholder="Endereço de email">
-    <input type="password" class="form-control" id="exampleInputPassword1" placeholder="Senha">
-    <a href="/Home/Recovery" style="text-align: right; margin-top: -15px;margin-bottom: -10px;">Esquci minha senha</a>
-    <button type="submit" class="form-btn">Entrar</button>
-</form>
-<p>Não possui uma conta? <span><a href="/Home/Signup">Crie aqui</a></span></p>
-</div>
+
+
+
+
+<div id="signup" class="container">
+
+
+    <div class="form-container">
+        <h1 style="text-align: center;">LOGIN</h1>
+
+        
+
+        @using (Html.BeginForm("Signin", "Home", FormMethod.Post))
+        {
+            <div>
+                @*@Html.Label("Email", "E-mail:", new {@class = "form-label"})*@
+                @Html.TextBox("Email", Model?.Email, new {@class = "form-control", @placeholder = "E-mail"})
+            </div>
+            <div>
+                @*@Html.Label("Password", "Password:", new {@class = "form-label"})*@
+                @Html.Password("Password", Model?.Password, new {@class = "form-control", @placeholder = "Senha"})
+            </div>
+
+
+            <button type="submit" value="Entrar" class="form-btn">Entrar</button>
+        }
+        <br />
+        @if (TempData["unauthorizedMessage"] != null)
+        {
+            <div class="alert-danger">
+                @TempData["unauthorizedMessage"]
+            </div>
+            <br />
+        }
+
+        @if (TempData["notLoggedIn"] != null)
+        {
+                <div class="alert-danger">
+                @TempData["notLoggedIn"]
+                </div>
+                <br />
+        }
+
+
+
+    </div>
 
 </div>
