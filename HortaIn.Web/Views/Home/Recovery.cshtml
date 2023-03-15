@@ -1,33 +1,44 @@
+@model HortaIn.BLL.Models.RecoveryDTO
 <div id="signup" class="container">
 
 <div class="form-container">
-    <h1 style="text-align: center;">RECUPERAR SENHA</h1>
-<form id="rform">
-    <input type="email" class="form-control" id="remail" aria-describedby="emailHelp" placeholder="Endereço de email">
-    <button type="submit" class="form-btn">Recuperar</button>
-</form>
+        <h1 style="text-align: center;">Esqueci a senha</h1>
+
+        
+
+        @using (Html.BeginForm("Recovery", "Home", FormMethod.Post))
+        {
+            <div>
+                @Html.TextBox("Email", Model?.Email, new {@class = "form-control", @placeholder = "E-mail"})
+            </div>
+            <button type="submit" value="Entrar" class="form-btn">Enviar</button>
+        }
+        <br />
+        @if (TempData["OkMessage"] != null)
+        {
+            <div class="alert-success">
+                Um link de redefinição de senha foi enviado para este email.
+            </div>
+            <br />
+        }
+          @if (TempData["NotFoundMessage"] != null)
+        {
+            <div class="alert-danger">
+                Email não encontrado
+            </div>
+            <br />
+        }
+        @if (TempData["ServerErrorMessage"] != null)
+        {
+            <div class="alert-danger">
+                Algo deu errado!
+            </div>
+            <br />
+        }
+
+
 <p><span><a href="/Home/Signin">Voltar</a></span></p>
+
+    </div>
 </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
-<script>
-    var loading = false
-    document.getElementById("rform").addEventListener("submit", async (e) => {
-        e.preventDefault()
-      
-        if(loading) return
-          loading = true
-        const email = document.getElementById("remail").value
-        try{
-        const response = await axios.post("http://localhost:3000/api/change-password/Request",{Email:email})
-        alert("Um link para redefinição de senha foi enviado para este endereço de email")
-        }
-        catch(e){
-            if(e.response?.status === 404){
-                return alert("Conta não encontrada")
-            }
-            alert("Algo deu errado. Tente novamente mais tarde")
-        }
-        loading = false
-    })
-</script>

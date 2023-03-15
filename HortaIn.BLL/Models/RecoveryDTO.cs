@@ -5,9 +5,8 @@ using System.Threading.Tasks;
 
 namespace HortaIn.BLL.Models
 {
-    public class PassowordRecoveryDTO
+    public class RecoveryDTO
     {
-        public string? newPassword { get; set; }
-        public string? Secret { get; set; }
+        public string Email { get; set; }
     }
 }

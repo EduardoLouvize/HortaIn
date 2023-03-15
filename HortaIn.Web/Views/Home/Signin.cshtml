@@ -14,17 +14,18 @@
 
         @using (Html.BeginForm("Signin", "Home", FormMethod.Post))
         {
-            <div>
-                @*@Html.Label("Email", "E-mail:", new {@class = "form-label"})*@
+            <div>                
                 @Html.TextBox("Email", Model?.Email, new {@class = "form-control", @placeholder = "E-mail"})
             </div>
             <div>
-                @*@Html.Label("Password", "Password:", new {@class = "form-label"})*@
                 @Html.Password("Password", Model?.Password, new {@class = "form-control", @placeholder = "Senha"})
             </div>
 
 
             <button type="submit" value="Entrar" class="form-btn">Entrar</button>
+            <div>
+                @Html.ActionLink("Esqueci minha senha", "Recovery", "Home")
+            </div>
         }
         <br />
         @if (TempData["unauthorizedMessage"] != null)

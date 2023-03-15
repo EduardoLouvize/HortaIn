@@ -129,21 +129,13 @@ namespace HortaIn.Web.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                //StringContent stringContent = new StringContent(JsonConvert.SerializeObject(loginCredentials), Encoding.UTF8, "application/json");
+                
 
                 using (var response = await httpClient.PostAsync("http://localhost:3000/api/Auth/Logout", null))
                 {
-                    //string token = await response.Content.ReadAsStringAsync();
+                   
                     string token = await response.Content.ReadAsStringAsync();
 
-
-                    //if (response.StatusCode == HttpStatusCode.Unauthorized)
-                    //{
-                    //    TempData["unauthorizedMessage"] = "Email ou senha incorreto!";
-                    //    return RedirectToAction("Signin");
-                    //}
-
-                    //HttpContext.Session.SetString("JWToken", "");
                     HttpContext.Session.Clear();
                 }
             }
@@ -152,9 +144,72 @@ namespace HortaIn.Web.Controllers
             return RedirectToAction("Signin");
         }
 
+        [HttpPost]
+        public async  Task<IActionResult> Recovery(RecoveryDTO RecoveryDTO)
+        {
+             using (var httpClient = new HttpClient())
+            {
+                StringContent stringContent = new StringContent(JsonConvert.SerializeObject(RecoveryDTO), Encoding.UTF8, "application/json");
+
+                using (var response = await httpClient.PostAsync("http://localhost:3000/api/change-password/Request", stringContent))
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        TempData["OkMessage"] = "";
+                        return RedirectToAction("Recovery");
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        TempData["NotFoundMessage"] = "Email não encontrado";
+                        return RedirectToAction("Recovery");
+                    }
+
+                    TempData["ServerErrorMessage"] = "Algo deu errado!";
+                    return RedirectToAction("Recovery");
+                }
+            }
+        }
         public IActionResult Recovery()
         {
             return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> Change(PassowordRecoveryDTO dto)
+        {
+            Regex validatedRegex = new Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
+            if (validatedRegex.IsMatch(dto.newPassword) == false)
+            {
+                    TempData["BadRequestMessage"] = "Senha deve ter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial.";
+                    return RedirectToAction("Change");
+            }
+
+             using (var httpClient = new HttpClient())
+            {
+                StringContent stringContent = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
+
+                using (var response = await httpClient.PostAsync($"http://localhost:3000/api/change-password/Change/{dto.Secret}", stringContent))
+                {
+                    if (response.StatusCode == HttpStatusCode.OK)
+                    {
+                        TempData["OkMessage"] = "";
+                        return RedirectToAction("Change");
+                    }
+
+                    if (response.StatusCode == HttpStatusCode.NotFound)
+                    {
+                        TempData["NotFoundMessage"] = "Link inválido";
+                        return RedirectToAction("Change");
+                    }
+
+                    TempData["ServerErrorMessage"] = "Algo deu errado!";
+                    return RedirectToAction("Change");
+                }
+            }
+
+
+
+
         }
         public IActionResult Change(string secret)
         {

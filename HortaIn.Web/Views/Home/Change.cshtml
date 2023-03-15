@@ -1,61 +1,57 @@
+@model HortaIn.BLL.Models.PassowordRecoveryDTO
 <div id="signup" class="container">
 
 <div class="form-container">
-    <h1 style="text-align: center;">REDEFINIR SENHA</h1>
-<form id="cform">
-    <input type="password" class="form-control" id="cpassword1" aria-describedby="emailHelp" placeholder="Nova senha">
-    <input type="password" class="form-control" id="cpassword2" aria-describedby="emailHelp" placeholder="Confirmar nova senha">
+        <h1 style="text-align: center;">Trocar senha</h1>
 
-    <button type="submit" class="form-btn">Recuperar</button>
-</form>
+        
+
+        @using (Html.BeginForm("Change", "Home", FormMethod.Post))
+        {
+            <div>
+                @Html.TextBox("NewPassword", Model?.newPassword, new {@class = "form-control", @placeholder = "Nova senha",@type="password"})
+            </div>
+              <div>
+                @Html.TextBox("Secret", Model?.Secret, new {@class = "form-control", @placeholder = "Nova senha", @type="hidden"})
+            </div>
+            <button type="submit" value="Entrar" class="form-btn">Alterar</button>
+        }
+        <br />
+        @if (TempData["OkMessage"] != null)
+        {
+            <div class="alert-success">
+                Senha alterada!
+            </div>
+            <br />
+        }
+          @if (TempData["NotFoundMessage"] != null)
+        {
+            <div class="alert-danger">
+                Link inválido
+            </div>
+            <br />
+        }
+        @if (TempData["ServerErrorMessage"] != null)
+        {
+            <div class="alert-danger">
+                Algo deu errado!
+            </div>
+            <br />
+        }
+                @if (TempData["BadRequestMessage"] != null)
+        {
+            <div class="alert-danger">
+                @TempData["BadRequestMessage"]
+            </div>
+            <br />
+        }
+
+
 <p><span><a href="/Home/Signin">Voltar</a></span></p>
+
+    </div>
 </div>
 </div>
-<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
 <script>
-const verifyLink = async() => {
-    const url = window.location.href
-    var secret = url.split("/")[5]
-    try{
-        const response = await axios.get(`http://localhost:3000/api/change-password/Request/${secret}`)
-       if(response?.status != 200) {
-        alert("Link inválido")
-        window.location.href = "/Home/Signin"
-       }
-    }
-    catch(e){
-        alert("Link inválido")
-        window.location.href = "/Home/Signin"
-    }
-}
-verifyLink()
-</script>
-<script>
-    var loading = false
-    document.getElementById("cform").addEventListener("submit",(e) => {
-    e.preventDefault()
-    if(loading) return
-    loading = true
-    const password1 = document.getElementById("cpassword1").value
-    const password2 = document.getElementById("cpassword2").value
-   if(password1 !== password2)  {
-    return alert("Senhas precisam ser iguais")
-  }
-  
-  if(!/^(?=.*[A-Z])(?=.*[a-z])(?=.*[!@@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?])/.test(password1)){
-      return alert("Senha deve ter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial")
-  }
-    const url = window.location.href
-    var secret = url.split("/")[5]
-     axios.post(`http://localhost:3000/api/change-password/Change/${secret}`,{newPassword:password1}).then((r) =>{
-        if(r.status === 200) alert("Senha alterada com sucesso!")
-        else {alert("Algo deu errado. Tente novamente mais tarde")}
-    }).catch(() => {
-        alert("Algo deu errado. Tente novamente mais tarde")
-    }).finally(() => {
-        loading = false
-    })
-
-
-})
+    document.getElementById("Secret").value = window.location.href.split("/")[5]
 </script>
