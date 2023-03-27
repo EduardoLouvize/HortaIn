@@ -37,7 +37,7 @@ namespace HortaIn.Web.Controllers
                 {
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                    using (var response = await httpClient.GetAsync("http://localhost:3000/api/Auth/Users"))
+                    using (var response = await httpClient.GetAsync("https://localhost:3001/api/Auth/Users"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
 
@@ -64,7 +64,7 @@ namespace HortaIn.Web.Controllers
                 {
                     StringContent stringContent = new StringContent(JsonConvert.SerializeObject(userDetails), Encoding.UTF8, "application/json");
 
-                    var response = await httpClient.PostAsync("http://localhost:3000/api/Auth/Register", stringContent);
+                    var response = await httpClient.PostAsync("https://localhost:3001/api/Auth/Register", stringContent);
                     if (response.StatusCode == HttpStatusCode.Conflict)
                     {
                         ViewBag.Message = "E-mail já utilizado.";
@@ -96,7 +96,7 @@ namespace HortaIn.Web.Controllers
             {
                 StringContent stringContent = new StringContent(JsonConvert.SerializeObject(loginCredentials), Encoding.UTF8, "application/json");
 
-                using (var response = await httpClient.PostAsync("http://localhost:3000/api/Auth/Login", stringContent))
+                using (var response = await httpClient.PostAsync("https://localhost:3001/api/Auth/Login", stringContent))
                 {
                     //string token = await response.Content.ReadAsStringAsync();
                     string token = await response.Content.ReadAsStringAsync();
@@ -129,11 +129,11 @@ namespace HortaIn.Web.Controllers
         {
             using (var httpClient = new HttpClient())
             {
-                
 
-                using (var response = await httpClient.PostAsync("http://localhost:3000/api/Auth/Logout", null))
+
+                using (var response = await httpClient.PostAsync("https://localhost:3001/api/Auth/Logout", null))
                 {
-                   
+
                     string token = await response.Content.ReadAsStringAsync();
 
                     HttpContext.Session.Clear();
@@ -145,13 +145,13 @@ namespace HortaIn.Web.Controllers
         }
 
         [HttpPost]
-        public async  Task<IActionResult> Recovery(RecoveryDTO RecoveryDTO)
+        public async Task<IActionResult> Recovery(RecoveryDTO RecoveryDTO)
         {
-             using (var httpClient = new HttpClient())
+            using (var httpClient = new HttpClient())
             {
                 StringContent stringContent = new StringContent(JsonConvert.SerializeObject(RecoveryDTO), Encoding.UTF8, "application/json");
 
-                using (var response = await httpClient.PostAsync("http://localhost:3000/api/change-password/Request", stringContent))
+                using (var response = await httpClient.PostAsync("https://localhost:3001/api/change-password/Request", stringContent))
                 {
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
@@ -180,15 +180,15 @@ namespace HortaIn.Web.Controllers
             Regex validatedRegex = new Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
             if (validatedRegex.IsMatch(dto.newPassword) == false)
             {
-                    TempData["BadRequestMessage"] = "Senha deve ter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial.";
-                    return RedirectToAction("Change");
+                TempData["BadRequestMessage"] = "Senha deve ter pelo menos uma letra maiúscula, uma letra minúscula e um caractere especial.";
+                return RedirectToAction("Change");
             }
 
-             using (var httpClient = new HttpClient())
+            using (var httpClient = new HttpClient())
             {
                 StringContent stringContent = new StringContent(JsonConvert.SerializeObject(dto), Encoding.UTF8, "application/json");
 
-                using (var response = await httpClient.PostAsync($"http://localhost:3000/api/change-password/Change/{dto.Secret}", stringContent))
+                using (var response = await httpClient.PostAsync($"https://localhost:3001/api/change-password/Change/{dto.Secret}", stringContent))
                 {
                     if (response.StatusCode == HttpStatusCode.OK)
                     {
