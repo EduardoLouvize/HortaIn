@@ -12,9 +12,9 @@ namespace HortaIn.API.Controllers
     [ApiController]
     public class PasswordRecoveryController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly PasswordChangeContext _context;
-        public PasswordRecoveryController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, UserManager<IdentityUser> userManager,PasswordChangeContext context)
+        public PasswordRecoveryController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, UserManager<ApplicationUser> userManager,PasswordChangeContext context)
         {
             this.userManager = userManager;
             this._context = context;

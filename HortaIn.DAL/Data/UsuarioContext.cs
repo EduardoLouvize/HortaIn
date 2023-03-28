@@ -9,7 +9,7 @@ namespace HortaIn.DAL.Data
     {
         public UsuarioContext(DbContextOptions<UsuarioContext> options) : base(options) { }
 
-        //public DbSet<UserDetails> Usuarios { get; set; }
+        
     }
 
     public class DesignTimeDbContextFactory : IDesignTimeDbContextFactory<UsuarioContext>

@@ -21,10 +21,10 @@ namespace HortaIn.API.Controllers
     public class AuthController : ControllerBase
     {
         private readonly JwtBearerTokenSettings jwtBearerTokenSettings;
-        private readonly UserManager<IdentityUser> userManager;
+        private readonly UserManager<ApplicationUser> userManager;
         private readonly ApplicationDbContext _context;
 
-        public AuthController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, UserManager<IdentityUser> userManager, ApplicationDbContext context)
+        public AuthController(IOptions<JwtBearerTokenSettings> jwtTokenOptions, UserManager<ApplicationUser> userManager, ApplicationDbContext context)
         {
             this.userManager = userManager;
             this.jwtBearerTokenSettings = jwtTokenOptions.Value;
@@ -39,7 +39,7 @@ namespace HortaIn.API.Controllers
                 return new BadRequestObjectResult(new { Message = "Registro de usuário falhou" });
             }
 
-            var identityUser = new IdentityUser() { UserName = userDetails.UserName, Email = userDetails.Email };
+            var identityUser = new ApplicationUser() { UserName = userDetails.UserName, Email = userDetails.Email };
             var emailInUse = await userManager.FindByEmailAsync(userDetails.Email);
             if (emailInUse != null)
             {
@@ -66,7 +66,7 @@ namespace HortaIn.API.Controllers
         [Route("Login")]
         public async Task<IActionResult> Login([FromBody] LoginCredentials credentials)
         {
-            IdentityUser identityUser;
+            ApplicationUser identityUser;
             if (!ModelState.IsValid
                 || credentials == null
                 || (identityUser = await ValidateUser(credentials)) == null)
@@ -75,7 +75,6 @@ namespace HortaIn.API.Controllers
             }
 
             var token = GenerateToken(identityUser);
-            //return Ok(new { Token = token, Message = "Success" });
             return Ok(token);
         }
 
@@ -90,7 +89,7 @@ namespace HortaIn.API.Controllers
         }
 
 
-        private async Task<IdentityUser> ValidateUser(LoginCredentials credentials)
+        private async Task<ApplicationUser> ValidateUser(LoginCredentials credentials)
         {
             var identityUser = await userManager.FindByEmailAsync(credentials.Email);
             if (identityUser != null)
@@ -102,7 +101,7 @@ namespace HortaIn.API.Controllers
             return null;
         }
 
-        private object GenerateToken(IdentityUser identityUser)
+        private object GenerateToken(ApplicationUser identityUser)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.ASCII.GetBytes(jwtBearerTokenSettings.SecretKey);
@@ -155,7 +154,7 @@ namespace HortaIn.API.Controllers
         //}
 
         [HttpGet("{email}")]
-        public async Task<ActionResult<IdentityUser>> GetUser(string email)
+        public async Task<ActionResult<ApplicationUser>> GetUser(string email)
         {
             var user = await _context.Users.FindAsync(email);
 
@@ -178,7 +177,7 @@ namespace HortaIn.API.Controllers
         [Authorize]
         [HttpGet]
         [Route("Users")]
-        public async Task<ActionResult<IEnumerable<IdentityUser>>> GetUsers()
+        public async Task<ActionResult<IEnumerable<ApplicationUser>>> GetUsers()
         {
             
             return await userManager.Users.ToListAsync();
