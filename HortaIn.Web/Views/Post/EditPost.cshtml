@@ -1,0 +1,33 @@
+﻿@model Post
+
+@{
+    Layout = "_LayoutHortaIn";
+}
+
+<div class="container">
+    <h1>Editar Post</h1>
+    <div class="form-container">
+        @using (Html.BeginForm("EditPost", "Post", FormMethod.Post))
+        {
+            <div>
+                @Html.TextArea("Conteudo", Model?.Conteudo, new {@class = "form-control", @placeholder = "Conteúdo do Post", style="height:350px"})
+            </div>
+            @*<div>
+                @Html.TextBox("Sobrenome", Model?.Sobrenome, new {@class = "form-control", @placeholder = "Sobrenome do usuário"})
+            </div>
+            <div>
+                @Html.TextBox("Email", Model?.Email, new {@class = "form-control", @placeholder = "E-mail"})
+            </div>
+            <div>
+                @{
+                    Html.Html5DateRenderingMode = Html5DateRenderingMode.Rfc3339;
+                }
+
+                @Html.TextBox("DataNascimento", Model?.DataNascimento, new {@class = "form-control", @placeholder = "Data de Nascimento"})
+            </div>*@
+
+
+            <button type="submit" value="EditarPost" class="form-btn">Editar Post</button>
+        }
+    </div>
+</div>

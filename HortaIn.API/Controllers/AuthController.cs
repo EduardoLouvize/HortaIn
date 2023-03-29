@@ -153,10 +153,13 @@ namespace HortaIn.API.Controllers
         //    return CreatedAtAction("GetUser", new { email = identityUser.Email }, identityUser);
         //}
 
+
         [HttpGet("{email}")]
         public async Task<ActionResult<ApplicationUser>> GetUser(string email)
         {
-            var user = await _context.Users.FindAsync(email);
+            //var users = await userManager.Users.ToListAsync();
+            var user = await userManager.Users.Where(e => e.Email == email).FirstOrDefaultAsync();
+            //var user = await _context.Users.FindAsync(email);
 
             if (user == null)
             {

@@ -11,5 +11,7 @@ namespace HortaIn.BLL.Models
         public int Id { get; set; }
         public string Conteudo { get; set; }
 
+        public string? ApplicationUserId { get; set; }
+
     }
 }

@@ -1,0 +1,16 @@
+﻿@model Post
+<div id="signup" class="container">
+    <div class="form-container">
+        <h1 style="text-align: center;">Seu Post será apagado</h1>
+
+        <p> Deseja mesmo apagar esse post?</p>
+
+        @using (Html.BeginForm("DeletePost", "Post", FormMethod.Post))
+        {
+            <div>
+                @Model.Conteudo
+            </div>
+            <button type="submit" value="Entrar" class="form-btn">Apagar</button>
+        }
+    </div>
+</div>

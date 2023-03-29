@@ -1,0 +1,14 @@
+﻿<div class="container">
+    <h1>Editar Post</h1>
+    <div class="form-container">
+        @using (Html.BeginForm("CreatePost", "Post", FormMethod.Post))
+        {
+            <div>
+                @Html.TextArea("Conteudo", "", new {@class = "form-control", @placeholder = "Conteúdo do Post", style="height:350px"})
+            </div>
+
+            <button type="submit" value="CriarPost" class="form-btn">Publicar</button>
+            @Html.ActionLink("Cancelar", "Index", "Post", "", new {@class = "btn btn-primary"} )
+        }
+    </div>
+</div>

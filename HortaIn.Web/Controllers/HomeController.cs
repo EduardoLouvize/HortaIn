@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Net;
 using System.Net.Http.Headers;
+using NuGet.Common;
 
 namespace HortaIn.Web.Controllers
 {
@@ -110,10 +111,30 @@ namespace HortaIn.Web.Controllers
 
                     HttpContext.Session.SetString("JWToken", token);
                 }
+
+
             }
 
-            TempData["unauthorizedMessage"] = "";
-            return RedirectToAction("ListUsers");
+            var accessToken = HttpContext.Session.GetString("JWToken");
+            using (var httpClient = new HttpClient())
+            {                
+                httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
+
+                using (var response = await httpClient.GetAsync($"https://localhost:3001/api/Auth/{loginCredentials.Email}"))
+                {
+
+
+                    string apiResponse = await response.Content.ReadAsStringAsync();
+                    var user = JsonConvert.DeserializeObject<UserDetails>(apiResponse);
+
+                    HttpContext.Session.SetString("loggedUser", user.Id);
+
+                    return RedirectToAction("Index", "Post", new { userId = user.Id });
+                }
+            }
+
+            //TempData["unauthorizedMessage"] = "";
+            //return RedirectToAction("Index", "Post", user.Id);
         }
 
         [HttpGet]

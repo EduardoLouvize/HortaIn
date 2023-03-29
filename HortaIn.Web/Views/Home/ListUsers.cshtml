@@ -9,17 +9,24 @@
         <thead>
             <tr>
                 <td>
+                    @Html.DisplayNameFor(model => model.Id)
+                </td>
+                <td>
                     @Html.DisplayNameFor(model => model.UserName)
-                </td><td>
+                </td>
+                <td>
                     @Html.DisplayNameFor(model => model.Email)
-                </td>                
+                </td>
             </tr>
-            
+
         </thead>
         <tbody>
             @foreach (var item in Model)
             {
                 <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Id)
+                    </td>
                     <td>
                         @Html.DisplayFor(modelItem => item.UserName)
                     </td>

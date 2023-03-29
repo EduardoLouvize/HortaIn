@@ -1,4 +1,38 @@
-﻿@*
+﻿@model IEnumerable<Post>
+@*
     For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 *@
-<h1>Página Index dos Posts</h1>
+
+@{
+    Layout = "_LayoutHortaIn";
+}
+<div class="container">
+
+    <h1>Página Index dos Posts</h1>
+
+    @Html.ActionLink("Novo Post", "CreatePost", "Post", "", new {@class = "btn btn-primary"} )
+    <br />
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Conteúdo</td>
+                <td></td>
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var post in Model)
+            {
+                <tr>
+                    <td>@post.Conteudo</td>
+                    <td>@Html.ActionLink("Editar", "EditPost", "Post", new {id=@post.Id}, new {@class = "btn btn-primary"} )</td>
+                    <td>@Html.ActionLink("Deletar", "DeletePost", "Post", new {id=@post.Id}, new {@class = "btn btn-primary"} )</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+    @*}*@
+
+
+
+</div>
