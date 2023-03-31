@@ -1,0 +1,16 @@
+﻿@model string
+<div id="signup" class="container">
+    <div class="form-container">
+        <h1 style="text-align: center;">Sua imagem será apagada</h1>
+
+        <p> Deseja mesmo apagar essa imagem?</p>
+
+        @using (Html.BeginForm("DeleteImage", "Image", FormMethod.Post))
+        {
+            <div>
+                <img class="img-thumbnail" src="@Model" />
+            </div>
+            <button type="submit" value="Entrar" class="form-btn">Apagar</button>
+        }
+    </div>
+</div>

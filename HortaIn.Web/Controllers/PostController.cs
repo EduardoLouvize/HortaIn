@@ -11,7 +11,6 @@ namespace HortaIn.Web.Controllers
 
     public class PostController : Controller
     {
-
         public async Task<IActionResult> Index()
         {
             var loggedUser = HttpContext.Session.GetString("loggedUser");

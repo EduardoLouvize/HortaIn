@@ -1,0 +1,18 @@
+﻿@model Image
+
+@{
+    Layout = "_LayoutHortaIn";
+}
+<div class="container">
+
+    <h1>Escolha a imagem</h1>
+
+
+    @using (Html.BeginForm("UploadImage", "Image", FormMethod.Post, new { enctype = "multipart/form-data" }))
+    {
+        <div class="form-group">
+            <input type="file" id="img" name="file" class="form-btn" accept="image/*">
+            <input type="submit" value="Enviar" class="form-btn" />
+        </div>
+    }
+

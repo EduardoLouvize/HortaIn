@@ -1,0 +1,38 @@
+﻿@model IEnumerable<Image>
+
+
+@{
+    Layout = "_LayoutHortaIn";
+}
+<div class="container">
+
+    <h1>Galeria de imagens</h1>
+
+
+    @Html.ActionLink("Incluir na galeria", "UploadImage", "Image", "", new {@class = "btn btn-primary"} )
+    <br />
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                <td>Conteúdo</td>
+
+                <td></td>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var image in Model)
+            {
+                <tr>
+                    <td>
+                        <img class="img-thumbnail" src="@image.Uri" />
+                    </td>
+
+                    <td>@Html.ActionLink("Deletar", "DeleteImage", "Image", new {imageUri=@image.Uri}, new {@class = "btn btn-primary"} )</td>
+
+
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>

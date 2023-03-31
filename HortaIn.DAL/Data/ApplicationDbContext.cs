@@ -21,6 +21,28 @@ namespace HortaIn.DAL.Data
         }      
 
         public DbSet<Post> Posts { get; set; }
+        public DbSet<Image> Images { get; set; }
+
+        protected override void OnModelCreating(ModelBuilder builder)
+        {            
+
+            // Configure the Post entity
+            builder.Entity<Post>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+                entity.Property(e => e.Conteudo).HasMaxLength(500).IsRequired();
+                entity.Property(e => e.ApplicationUserId).IsRequired();
+            });
+
+            builder.Entity<Image>(entity =>
+            {
+                entity.HasKey(p => p.Id);
+                entity.Property(e => e.Uri).IsRequired();
+                entity.Property(e => e.ApplicationUserId).IsRequired();
+            });
+
+            base.OnModelCreating(builder);
+        }
 
     }
 

@@ -1,3 +1,6 @@
+using HortaIn.BLL.Interfaces;
+using HortaIn.DAL.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -5,8 +8,10 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession(options =>
 {
-    options.IdleTimeout = TimeSpan.FromMinutes(20);
+    options.IdleTimeout = TimeSpan.FromMinutes(120);
 });
+
+builder.Services.AddTransient<IAzureStorage, AzureStorage>();
 
 var app = builder.Build();
 

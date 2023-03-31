@@ -1,6 +1,8 @@
 using HortaIn.API.JWTBearerConfiguration;
+using HortaIn.BLL.Interfaces;
 using HortaIn.BLL.Models;
 using HortaIn.DAL.Data;
+using HortaIn.DAL.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
@@ -28,6 +30,8 @@ builder.Services
     .AddIdentity<ApplicationUser, IdentityRole>(options => options.SignIn.RequireConfirmedAccount = true).AddDefaultTokenProviders()
                 .AddEntityFrameworkStores<ApplicationDbContext>();
 
+
+builder.Services.AddTransient<IAzureStorage, AzureStorage>();
 
 //JWT Bearer
 // configure strongly typed settings objects
