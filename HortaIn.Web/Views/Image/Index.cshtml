@@ -26,8 +26,10 @@
                     <td>
                         <img class="img-thumbnail" src="@image.Uri" />
                     </td>
-
-                    <td>@Html.ActionLink("Deletar", "DeleteImage", "Image", new {imageUri=@image.Uri}, new {@class = "btn btn-primary"} )</td>
+                    @if (image.Editable)
+                    {
+                        <td>@Html.ActionLink("Deletar", "DeleteImage", "Image", new {imageUri=@image.Uri}, new {@class = "btn btn-primary"} )</td>
+                    }                   
 
 
                 </tr>

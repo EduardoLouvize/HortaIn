@@ -62,33 +62,7 @@ namespace HortaIn.API.Controllers
                 return File(file.Content, file.ContentType, file.Name);
             }
         }
-
-        //[HttpGet("{filenames}")]
-        //public async Task<List<IActionResult>> DownloadFiles(string[] filenames)
-        //{
-        //    List<BlobDto>? files = await _storage.DownloadFilesAsync(filenames);
-
-        //    //// Check if file was found
-        //    //foreach (var file in files)
-        //    //{
-        //    //    if (file.Name == null)
-        //    //    {
-        //    //        // Was not, return error message to client
-        //    //        return StatusCode(StatusCodes.Status500InternalServerError, $"File {file.Name} could not be downloaded.");
-        //    //    }
-        //    //    else
-        //    //    {
-        //    //        // File was found, return it to client
-
-        //    //        return List<File(file.Content, file.ContentType, file.Name)>;
-        //    //    }
-        //    //}
-
-        //    var result = JsonConvert.SerializeObject(files);
-
-        //    return result;
-            
-        //}
+        
 
         [HttpDelete("filename")]
         public async Task<IActionResult> Delete(string filename)

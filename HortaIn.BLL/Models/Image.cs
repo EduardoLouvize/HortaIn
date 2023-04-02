@@ -12,6 +12,8 @@ namespace HortaIn.BLL.Models
     {
         public int Id { get; set; }
         public string Uri { get; set; }
+        [NotMapped]
+        public bool Editable { get; set; } = false;
 
         public string? ApplicationUserId { get; set; }
         [NotMapped]

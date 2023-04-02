@@ -24,10 +24,10 @@ namespace HortaIn.Web.Controllers
         // GET: ImageController
         public async Task<ActionResult> Index()
         {
-            //var loggedUser = HttpContext.Session.GetString("loggedUser");
-            List<Image> imageList = new List<Image>();
-            var sasUrl = string.Empty;
+            
+            List<Image> imageList = new List<Image>();           
 
+            var loggedUser = HttpContext.Session.GetString("loggedUser");
             var accessToken = HttpContext.Session.GetString("JWToken");
 
             if (accessToken != null)
@@ -36,7 +36,7 @@ namespace HortaIn.Web.Controllers
                 {
                     httpClient.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", accessToken);
 
-                    using (var response = await httpClient.GetAsync($"https://localhost:3001/api/images/userimages"))
+                    using (var response = await httpClient.GetAsync($"https://localhost:3001/api/images/userimages/{loggedUser}"))
                     {
                         string apiResponse = await response.Content.ReadAsStringAsync();
 

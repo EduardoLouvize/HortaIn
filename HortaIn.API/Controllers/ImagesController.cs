@@ -46,9 +46,17 @@ namespace HortaIn.API.Controllers
         // GET: api/images/2
         [HttpGet("userimages/{userId}")]
         public async Task<ActionResult<IEnumerable<Image>>> GetImagesByUserId(string userId)
-        {            
-            
-            var images = await _context.Images.Where(p => p.ApplicationUserId == userId).ToListAsync();
+        {
+
+            //var images = await _context.Images.Where(p => p.ApplicationUserId == userId).ToListAsync();
+            var images = await _context.Images.ToListAsync();
+            foreach (var image in images)
+            {
+                if (image.ApplicationUserId == userId)
+                {
+                    image.Editable = true;
+                }
+            }
 
             if (images == null)
             {
@@ -112,49 +120,6 @@ namespace HortaIn.API.Controllers
             return NoContent();
         }
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
         // DELETE: api/Images/5
         [HttpDelete("{imageUri}")]
         public async Task<IActionResult> DeleteImage(string imageUri)
@@ -171,41 +136,6 @@ namespace HortaIn.API.Controllers
 
             return NoContent();
         }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
         private bool ImageExists(int id)
