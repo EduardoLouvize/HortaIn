@@ -34,6 +34,7 @@ namespace HortaIn.API.Controllers
         [Route("Register")]
         public async Task<IActionResult> Register([FromBody] UserDetails userDetails)
         {
+            Console.WriteLine("a");
             if (!ModelState.IsValid || userDetails == null)
             {
                 return new BadRequestObjectResult(new { Message = "Registro de usuário falhou" });

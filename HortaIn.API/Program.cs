@@ -14,13 +14,7 @@ var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
-//Instanciando Db Connection
-builder.Services.AddDbContext<UsuarioContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppIdentityConnection"))
-    );
-builder.Services.AddDbContext<PasswordChangeContext>(
-    options => options.UseSqlServer(builder.Configuration.GetConnectionString("UsuariosDb"))
-    );
+
 //Instanciando Db do Identity
 builder.Services.AddDbContext<ApplicationDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("AppIdentityConnection")));
 
