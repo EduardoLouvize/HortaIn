@@ -19,7 +19,7 @@ namespace HortaIn.DAL.Data
         {
 
         }      
-
+        public DbSet<PasswordRecovery> PasswordChange { get; set; }
         public DbSet<Post> Posts { get; set; }
         public DbSet<Image> Images { get; set; }
 

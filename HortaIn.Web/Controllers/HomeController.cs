@@ -58,7 +58,8 @@ namespace HortaIn.Web.Controllers
         public async Task<IActionResult> Signup(UserDetails userDetails)
         {
             Regex validatedRegex = new Regex("^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[#?!@$%^&*-]).{8,}$");
-
+            userDetails.Id = "any";
+            Console.WriteLine(userDetails.Id);
             if (validatedRegex.IsMatch(userDetails.Password))
             {
                 using (var httpClient = new HttpClient())
@@ -66,6 +67,7 @@ namespace HortaIn.Web.Controllers
                     StringContent stringContent = new StringContent(JsonConvert.SerializeObject(userDetails), Encoding.UTF8, "application/json");
 
                     var response = await httpClient.PostAsync("https://localhost:3001/api/Auth/Register", stringContent);
+                    Console.WriteLine(response.StatusCode);
                     if (response.StatusCode == HttpStatusCode.Conflict)
                     {
                         ViewBag.Message = "E-mail já utilizado.";
